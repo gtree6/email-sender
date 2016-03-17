@@ -9,6 +9,7 @@ $message;
         $question = validate_input($_POST['questionField']);
         $name = validate_input($_POST['nameField']);
         $mail = validate_input($_POST['mailField']);
+        $geno_mail = "geno.shishkov@mentormate.com";
         
         echo $question. " from " . $name . " with email: " . $mail;
         $message = "Hello, \r\nthis is an automated e-mail from my php email-sending script. "
@@ -16,7 +17,10 @@ $message;
         $message .= "\r\nMy question is: " . $question;
         $message .= "\r\nSent from: " . $name;
         $message .= "\r\nE-mail: " . $mail;
-        send_email($message, $mail);
+        
+        $headers = "From: " . $mail . "\r\n" .
+            "CC: geno.shishkov@mentormate.com";
+        send_email($message, $mail, $headers);
         
         echo "<br>".$message;
     } else {
@@ -32,8 +36,8 @@ $message;
         return $input;
     }
     
-    function send_email($msg, $mail) {
-        $email = mail("georgi.trifonov@mentormate.com", "Test", $msg, "From:" . $mail);
+    function send_email($msg, $mail, $hdrs) {
+        $email = mail("georgi.trifonov@mentormate.com", "Test", $msg, $hdrs);
         if($email){
             echo "<h2>Thank you for using our mail form</h2>";
           }else{
