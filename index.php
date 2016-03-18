@@ -17,9 +17,9 @@ session_start();
                <label for="questionField" id="questionLabel">Your question:</label>
                <textarea name="questionField" id="questionField"></textarea>
                <label for="nameField" id="nameLabel">Your name:</label>
-               <input type="text" name="nameField" id="nameField">
+               <input type="text" name="nameField" id="nameField" value="<?php echo $_SESSION['user_name']?>">
                <label for="mailField" id="mailLabel">Your email:</label>
-               <input type="email" name="mailField" id="mailField">
+               <input type="email" name="mailField" id="mailField" value="<?php echo $_SESSION['user_mail']?>">
                
                <input type='submit' id='submitQuestion' value='Submit/send'>
            </form>
