@@ -8,7 +8,7 @@ session_start();
             #questionField {height:50px; width:1000px; float:left; clear:right;}
             #questionLabel {float:left;}
             #nameField, #mailField, #nameLabel, #mailLabel {float:left;}
-            #nameField, #mailField, #questionField {border: 2px solid red;}
+            #nameField, #mailField, #questionField {border: 2px solid gray;}
         </style>
     </head>
     <body>

@@ -9,12 +9,14 @@ session_start();
 if (!empty($_POST['questionField'] && !empty($_POST['nameField'] && !empty($_POST['mailField'])))) {
 
     $validate = new Validator();
+    $validateMail = new EmailValidator();
     $send = new Sender();
     $compose = new Composer();
 
-    $question = $validate->validate_input($_POST['questionField']);
-    $name = $validate->validate_input($_POST['nameField']);
-    $mail = $validate->validate_input($_POST['mailField']);
+    $question = $validate->validate_input(filter_input(INPUT_POST, 'questionField'));
+    $name = $validate->validate_input(filter_input(INPUT_POST, 'nameField'));
+    $mail = $validate->validate_input(filter_input(INPUT_POST, 'mailField'));
+    $mail = $validateMail->validate_mail($mail);
 
     $_SESSION['user_name'] = $name;
     $_SESSION['user_mail'] = $mail;
@@ -34,8 +36,8 @@ class Validator {
     /**
      * Basic security for input.
      * 
-     * @param string $input
-     * @return string
+     * @param string $input - the user input
+     * @return string $input - the validated harmless input
      */
 
     function validate_input($input) {
@@ -46,13 +48,34 @@ class Validator {
     }
 }
 
+class EmailValidator {
+    /*
+     * Check if provided e-mail is valid.
+     * 
+     * @param string $mail = the e-mail to check
+     * @return string $mail = valid e-mail
+     */
+    
+    function validate_mail($mail) {
+        if (!filter_var($mail, FILTER_VALIDATE_EMAIL) === false) {
+            //echo("$mail is a valid email address");
+            
+            return $mail;
+        } else {
+            echo("<h3>$mail is not a valid email address</h3>");
+            echo "<br><b><a href='javascript:history.go(-1)'>Go back</a></b>";
+            exit();
+        }
+    }
+}
+
 class Sender {
     /**
      * 
      * Sends the e-mail.
      * 
-     * @param string $msg
-     * @param string $hdrs
+     * @param string $msg - the message 
+     * @param string $hdrs - the headers
      */
     function send_email($msg, $hdrs) {
         $email = mail("georgi.trifonov@mentormate.com", "Week 2 Task", $msg, $hdrs);
@@ -89,7 +112,6 @@ class Composer {
         $hdr = "MIME-Version: 1.0 \r\n";
         $hdr .= "Content-Type: text/html; charset=UTF-8\r\n";
         $hdr .= "From: " . $mail;
-        $hdr .= "\r\n   Cc: geno.shishkov@mentormate.com";
 
         return $hdr;
     }
